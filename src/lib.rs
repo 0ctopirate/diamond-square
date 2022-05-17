@@ -11,7 +11,7 @@ const TILES: u32 = 512;
 const SIZE: u32 = TILES * 2 + 1;
 const MSIZE: usize = (SIZE * SIZE) as usize;
 
-fn main() {
+pub fn generate() {
     let mut img_buffer: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(SIZE, SIZE);
 
     let mut map: Map = Map::new();
