@@ -5,31 +5,7 @@ use rand::{Rng, SeedableRng};
 use std::fmt;
 use std::path::Path;
 
-const WIGGLE: i16 = 32;
-const TILES: usize = 512;
-
-pub fn generate() {
-    let mut map: Map = Map::new(WIGGLE, TILES);
-    
-    let mut img_buffer: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(map.size as u32, map.size as u32);
-
-    let steps = map.tiles.trailing_zeros() + 1;
-
-    for s in 0..steps {
-        map.squares(1 << s);
-        map.diamonds(1 << (steps - s - 1));
-    }
-
-    for x in 0..map.size {
-        for y in 0..map.size {
-            img_buffer.put_pixel(x as u32, y as u32, Rgb([map.terrain[x][y] as u8, 13, 50]));
-        }
-    }
-
-    img_buffer.save(Path::new("map.png")).unwrap();
-}
-
-struct Map {
+pub struct Map {
     pub terrain: Vec<Vec<u32>>,
     pub wiggle_range: i16,
     pub tiles: usize,
@@ -37,7 +13,7 @@ struct Map {
 }
 
 impl Map {
-    fn new(wiggle_range: i16, tiles: usize) -> Self {
+    pub fn new(wiggle_range: i16, tiles: usize) -> Self {
         let size: usize = tiles * 2 + 1;
 
         let mut terrain = vec![vec![0; size]; size];
@@ -54,6 +30,27 @@ impl Map {
             tiles,
             size
         }
+    }
+
+    pub fn generate(&mut self) {
+        let steps = self.tiles.trailing_zeros() + 1;
+
+        for s in 0..steps {
+            self.squares(1 << s);
+            self.diamonds(1 << (steps - s - 1));
+        }
+    }
+
+    pub fn save(&self) {
+        let mut img_buffer: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(self.size as u32, self.size as u32);
+
+        for x in 0..self.size {
+            for y in 0..self.size {
+                img_buffer.put_pixel(x as u32, y as u32, Rgb([self.terrain[x][y] as u8, 13, 50]));
+            }
+        }
+    
+        img_buffer.save(Path::new("map.png")).unwrap();
     }
 
     fn square(&mut self, x: usize, y: usize, radius: usize) {
