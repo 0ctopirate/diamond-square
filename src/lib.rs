@@ -1,9 +1,5 @@
-use ansi_term::Colour::RGB;
-use image::{ImageBuffer, Rgb};
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
-use std::fmt;
-use std::path::Path;
 
 pub struct Map {
     pub terrain: Vec<Vec<u32>>,
@@ -39,18 +35,6 @@ impl Map {
             self.squares(1 << s);
             self.diamonds(1 << (steps - s - 1));
         }
-    }
-
-    pub fn save(&self) {
-        let mut img_buffer: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(self.size as u32, self.size as u32);
-
-        for x in 0..self.size {
-            for y in 0..self.size {
-                img_buffer.put_pixel(x as u32, y as u32, Rgb([self.terrain[x][y] as u8, 13, 50]));
-            }
-        }
-    
-        img_buffer.save(Path::new("map.png")).unwrap();
     }
 
     fn square(&mut self, x: usize, y: usize, radius: usize) {
@@ -124,16 +108,3 @@ impl Map {
     }
 }
 
-impl fmt::Display for Map {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for x in 0..self.size {
-            for y in 0..self.size {
-                let color = self.terrain[x][y] as u8;
-                let styled = RGB(color, 70, 130).paint("███");
-                let _ = write!(f, "{}", styled);
-            }
-            let _ = write!(f, "\n");
-        }
-        write!(f, "")
-    }
-}

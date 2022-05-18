@@ -8,5 +8,7 @@ edition = "2018"
 
 [dependencies]
 rand = { version = "0.7.3", features = ["small_rng"] }
+
+[dev-dependencies]
 ansi_term = "0.12.1"
 image = "*"
