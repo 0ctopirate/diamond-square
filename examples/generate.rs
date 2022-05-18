@@ -1,6 +1,4 @@
-// use ansi_term::Colour::RGB;
 use image::{ImageBuffer, Rgb};
-// use std::fmt;
 use std::path::Path;
 
 extern crate diamond_square;
@@ -9,26 +7,12 @@ use diamond_square::Map;
 const WIGGLE: i16 = 32;
 const TILES: usize = 512;
 
-// impl fmt::Display for Map {
-//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-//         for x in 0..self.size {
-//             for y in 0..self.size {
-//                 let color = self.terrain[x][y] as u8;
-//                 let styled = RGB(color, 70, 130).paint("███");
-//                 let _ = write!(f "{}", styled);
-//             }
-//             let _ = write!(f, "\n");
-//         }
-//         write!(f, "")
-//     }
-// }
-
 fn main() {
 	let mut map = Map::new(WIGGLE, TILES);
 	
 	map.generate();
 
-	save_map_as_image(map);
+	save_map_as_image(map)
 }
 
 fn save_map_as_image(map: Map) {
