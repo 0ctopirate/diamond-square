@@ -4,7 +4,7 @@ use rand::{Rng, SeedableRng};
 mod terrain;
 
 pub struct Map {
-    pub terrain: terrain::Terrain,
+    pub terrain: terrain::Terrain<u32>,
     pub wiggle_range: i16,
     pub tiles: usize,
     pub size: usize

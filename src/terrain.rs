@@ -1,30 +1,30 @@
 use std::ops::{Index, IndexMut};
 
-pub struct Terrain {
-	pub map: Box<[u32]>,
+pub struct Terrain<T: Default> {
+	pub map: Box<[T]>,
 	pub width: usize,
 	pub height: usize
 }
 
-impl Terrain {
+impl<T: Default + Clone> Terrain<T> {
 	pub fn new(width: usize, height: usize) -> Self {
-		Terrain {
-			map: vec![0; width * height].into_boxed_slice(),
+		Terrain::<T> {
+			map: vec![T::default(); width * height].into_boxed_slice(),
 			width,
 			height
 		}
 	}
 }
 
-impl Index<usize> for Terrain {
-	type Output = [u32];
+impl<T: Default + Clone> Index<usize> for Terrain<T> {
+	type Output = [T];
 
 	fn index(&self, i: usize) -> &Self::Output {
 		&self.map[(i * self.height)..(i * self.height + self.width)]
 	}
 }
 
-impl IndexMut<usize> for Terrain {
+impl<T: Default + Clone> IndexMut<usize> for Terrain<T> {
 	fn index_mut(&mut self, i: usize) -> &mut Self::Output {
 		&mut self.map[(i * self.height)..(i * self.height + self.width)]
 	}
