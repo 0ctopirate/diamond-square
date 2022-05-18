@@ -15,8 +15,6 @@ pub fn generate() {
 
     let mut map: Map = Map::new();
 
-    map.init();
-
     let steps = TILES.trailing_zeros() + 1;
 
     for s in 0..steps {
@@ -35,27 +33,21 @@ pub fn generate() {
 
 struct Map {
     pub terrain: Box<[[u32; SIZE as usize]; SIZE as usize]>,
-    rng: SmallRng,
 }
 
 impl Map {
-    fn new() -> Map {
+    fn new() -> Self {
+        let mut terrain = Box::new([[0; SIZE as usize]; SIZE as usize]);
+
+        let mut rng = SmallRng::from_entropy();
+        terrain[0][0]               = rng.gen::<u8>() as u32;
+        terrain[SIZE - 1][0]        = rng.gen::<u8>() as u32;
+        terrain[0][SIZE - 1]        = rng.gen::<u8>() as u32;
+        terrain[SIZE - 1][SIZE - 1] = rng.gen::<u8>() as u32;
+
         Map {
-            rng: SmallRng::from_entropy(),
-            terrain: Box::new([[0; SIZE as usize]; SIZE as usize]),
+            terrain,
         }
-    }
-
-    fn init(&mut self) {
-        let a = self.rng.gen::<u8>() as u32;
-        let b = self.rng.gen::<u8>() as u32;
-        let c = self.rng.gen::<u8>() as u32;
-        let d = self.rng.gen::<u8>() as u32;
-
-        self.terrain[0][0] = a;
-        self.terrain[SIZE - 1][0] = b;
-        self.terrain[0][SIZE - 1] = c;
-        self.terrain[SIZE - 1][SIZE - 1] = d;
     }
 
     fn square(&mut self, x: usize, y: usize, radius: usize) {
@@ -124,7 +116,9 @@ impl Map {
     fn wiggle(&mut self, value: u32, range: i16) -> u32 {
         let min = range.min(value as i16);
 
-        (value as i16 + self.rng.gen_range(-min, range)) as u32
+        let mut rng = SmallRng::from_entropy();
+
+        (value as i16 + rng.gen_range(-min, range)) as u32
     }
 }
 
