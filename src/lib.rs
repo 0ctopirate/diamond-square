@@ -1,8 +1,10 @@
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 
+mod terrain;
+
 pub struct Map {
-    pub terrain: Vec<Vec<u32>>,
+    pub terrain: terrain::Terrain,
     pub wiggle_range: i16,
     pub tiles: usize,
     pub size: usize
@@ -12,7 +14,7 @@ impl Map {
     pub fn new(wiggle_range: i16, tiles: usize) -> Self {
         let size: usize = tiles * 2 + 1;
 
-        let mut terrain = vec![vec![0; size]; size];
+        let mut terrain = terrain::Terrain::new(size, size);
 
         let mut rng = SmallRng::from_entropy();
         terrain[0][0]               = rng.gen::<u8>() as u32;

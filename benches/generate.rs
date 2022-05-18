@@ -24,7 +24,7 @@ mod tests {
 	#[test]
 	fn generate_produces_terrain() {
 		let map = generate();
-        assert_ne!(map.terrain[0], map.terrain[map.size]);
+        assert_ne!(map.terrain[0], map.terrain[map.size - 1]);
     }
 
     #[bench]
