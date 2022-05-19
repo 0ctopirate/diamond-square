@@ -30,13 +30,15 @@ impl Map {
         }
     }
 
-    pub fn generate(&mut self) {
+    pub fn generate(&mut self) -> &mut Self {
         let steps = self.tiles.trailing_zeros() + 1;
 
         for s in 0..steps {
             self.squares(1 << s);
             self.diamonds(1 << (steps - s - 1));
         }
+
+        self
     }
 
     fn square(&mut self, x: usize, y: usize, radius: usize) {
